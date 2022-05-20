@@ -1,0 +1,10 @@
+.board {
+  overflow-x: auto;
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  background-color: #838c91;
+  background-image: url('../../assets/images/background.jpg');
+  background-size: cover;
+  padding: 16px 12px;
+}
