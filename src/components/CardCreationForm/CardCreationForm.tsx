@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { createCard } from '../../store/cards/cards.slice';
 import styles from './CardCreationForm.module.css';
 
 interface ICardCreationFormProps {
@@ -6,8 +8,24 @@ interface ICardCreationFormProps {
 }
 
 export function CardCreationForm({ onHideFormClick }: ICardCreationFormProps) {
+  const dispatch = useDispatch();
+  const [cardTitle, setCardTitle] = React.useState<string>('');
+
   const handleFormSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    dispatch(
+      createCard({
+        id: String(Date.now()),
+        parent_id: 'panel_1',
+        title: cardTitle,
+      })
+    );
+    setCardTitle('');
+  };
+
+  const handleFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCardTitle(event.target.value);
   };
 
   return (
@@ -15,14 +33,12 @@ export function CardCreationForm({ onHideFormClick }: ICardCreationFormProps) {
       <textarea
         autoFocus
         className={styles.cardCreationFormField}
+        onChange={handleFieldChange}
         rows={3}
+        value={cardTitle}
         placeholder="Enter card name"></textarea>
       <div className={styles.cardCreationFormButtons}>
-        <button
-          className={styles.cardCreationFormCreateButton}
-          onClick={onHideFormClick}
-          type="submit"
-          title="Add card">
+        <button className={styles.cardCreationFormCreateButton} type="submit" title="Add card">
           Add card
         </button>
         <button
