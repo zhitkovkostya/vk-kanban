@@ -1,0 +1,69 @@
+.cardCreationForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardCreationFormField {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  box-shadow: 0 1px 0 #091e4240;
+  resize: none;
+}
+
+.cardCreationFormField:focus {
+  outline: none;
+}
+
+.cardCreationFormButtons {
+  display: flex;
+}
+
+.cardCreationFormCreateButton {
+  margin-right: 4px;
+  padding: 6px 12px;
+  background-color: #0079bf;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  text-align: left;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.cardCreationFormCreateButton:hover {
+  background-color: #026aa7;
+}
+
+.cardCreationFormCreateButton:active {
+  background-color: #055a8c;
+}
+
+.cardCreationFormCancelButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  text-align: left;
+  color: #5e6c84;
+  cursor: pointer;
+}
+
+.cardCreationFormCancelButton:hover {
+  color: #172b4d;
+}
+
+.cardCreationFormCancelIcon {
+  display: inline-block;
+  vertical-align: middle;
+}
