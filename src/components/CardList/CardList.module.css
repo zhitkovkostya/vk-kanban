@@ -1,0 +1,61 @@
+.cardList {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-basis: 272px;
+  width: 272px;
+  max-height: 100%;
+  margin: 0 4px;
+  background-color: #ebecf0;
+  border-radius: 3px;
+}
+
+.cardListHeader {
+  padding: 10px 16px;
+  font-weight: 600;
+  color: #838c91;
+}
+
+.cardListBody {
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 8px;
+}
+
+.cardListFooter {
+  padding: 2px 8px 8px 8px;
+}
+
+.cardListCreateButton {
+  width: 100%;
+  padding: 6px 8px;
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  text-align: left;
+  color: #5e6c84;
+  cursor: pointer;
+}
+
+.cardListCreateButton:hover {
+  background-color: #091e4214;
+  color: #172b4d;
+}
+
+.cardListCreateButton:active {
+  background-color: #091e4221;
+}
+
+.cardListCreateButtonIcon {
+  margin-right: 4px;
+}
+
+.cardListCreateButtonIcon,
+.cardListCreateButtonText {
+  display: inline-block;
+  vertical-align: middle;
+}
