@@ -35,7 +35,9 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    createCardList: (state, action) => {},
+    createList: (state, action: PayloadAction<ICardList>) => {
+      state.byId[action.payload.id] = action.payload;
+    },
     setEditorId: (state, action: PayloadAction<string>) => {
       state.editorId = action.payload;
     },
@@ -45,7 +47,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { createCardList, setEditorId, resetEditorId } = boardSlice.actions;
+export const { createList, setEditorId, resetEditorId } = boardSlice.actions;
 
 export const selectCardLists = (state: RootState) => Object.values(state.board.byId);
 

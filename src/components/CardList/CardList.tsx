@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CardCreationForm } from '../CardCreationForm/CardCreationForm';
+import { EditorForm } from '../EditorForm/EditorForm';
 import { Card } from '../Card/Card';
 import { RootState } from '../../store';
 import { createCard, selectCardsFromList } from '../../store/cards/cards.slice';
@@ -9,10 +9,12 @@ import styles from './CardList.module.css';
 
 interface ICardListProps {
   id: string;
-  title: string;
+  isNew?: boolean;
+  children?: React.ReactNode;
+  title?: string;
 }
 
-export function CardList({ id, title }: ICardListProps) {
+export function CardList({ id, isNew = false, children, title }: ICardListProps) {
   const [formValue, setFormValue] = React.useState<string>('');
   const dispatch = useDispatch();
   const isFormShown = useSelector((state: RootState) => selectIsFormShown(state, id));
@@ -49,45 +51,53 @@ export function CardList({ id, title }: ICardListProps) {
 
   return (
     <div className={styles.cardList}>
-      <header className={styles.cardListHeader}>{title}</header>
-      <main className={styles.cardListBody}>
-        {cards.map((card) => (
-          <Card id={card.id} key={card.id}>
-            {card.title}
-          </Card>
-        ))}
-      </main>
-      <footer className={styles.cardListFooter}>
-        {isFormShown && (
-          <CardCreationForm
-            value={formValue}
-            onChange={handleFormChange}
-            onSubmit={handleFormSubmit}
-            onHideClick={handleHideFormClick}
-          />
-        )}
-        {!isFormShown && (
-          <button
-            className={styles.cardListCreateButton}
-            onClick={handleShowFormClick}
-            type="button">
-            <svg
-              className={styles.cardListCreateButtonIcon}
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <span className={styles.cardListCreateButtonText}>Add card</span>
-          </button>
-        )}
-      </footer>
+      {title && <header className={styles.cardListHeader}>{title}</header>}
+      {children && <main className={styles.cardListBody}>{children}</main>}
+      {cards.length > 0 && (
+        <main className={styles.cardListBody}>
+          {cards.map((card) => (
+            <Card id={card.id} key={card.id}>
+              {card.title}
+            </Card>
+          ))}
+        </main>
+      )}
+
+      {!isNew && (
+        <footer className={styles.cardListFooter}>
+          {isFormShown && (
+            <EditorForm
+              placeholder="Enter card name"
+              submitText="Add card"
+              value={formValue}
+              onChange={handleFormChange}
+              onSubmit={handleFormSubmit}
+              onHideClick={handleHideFormClick}
+            />
+          )}
+          {!isFormShown && (
+            <button
+              className={styles.cardListCreateButton}
+              onClick={handleShowFormClick}
+              type="button">
+              <svg
+                className={styles.cardListCreateButtonIcon}
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span className={styles.cardListCreateButtonText}>Add card</span>
+            </button>
+          )}
+        </footer>
+      )}
     </div>
   );
 }

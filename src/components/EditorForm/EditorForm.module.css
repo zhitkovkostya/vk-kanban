@@ -1,9 +1,9 @@
-.cardCreationForm {
+.editorForm {
   display: flex;
   flex-direction: column;
 }
 
-.cardCreationFormField {
+.editorFormField {
   margin-bottom: 8px;
   padding: 6px 8px;
   border: none;
@@ -11,19 +11,20 @@
   font-size: 1rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 20px;
   box-shadow: 0 1px 0 #091e4240;
   resize: none;
 }
 
-.cardCreationFormField:focus {
+.editorFormField:focus {
   outline: none;
 }
 
-.cardCreationFormButtons {
+.editorFormButtons {
   display: flex;
 }
 
-.cardCreationFormCreateButton {
+.editorFormCreateButton {
   margin-right: 4px;
   padding: 6px 12px;
   background-color: #0079bf;
@@ -35,15 +36,15 @@
   cursor: pointer;
 }
 
-.cardCreationFormCreateButton:hover {
+.editorFormCreateButton:hover {
   background-color: #026aa7;
 }
 
-.cardCreationFormCreateButton:active {
+.editorFormCreateButton:active {
   background-color: #055a8c;
 }
 
-.cardCreationFormCancelButton {
+.editorFormCancelButton {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -59,11 +60,11 @@
   cursor: pointer;
 }
 
-.cardCreationFormCancelButton:hover {
+.editorFormCancelButton:hover {
   color: #172b4d;
 }
 
-.cardCreationFormCancelIcon {
+.editorFormCancelIcon {
   display: inline-block;
   vertical-align: middle;
 }

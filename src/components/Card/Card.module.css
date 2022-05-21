@@ -10,6 +10,10 @@
   cursor: pointer;
 }
 
+.card:last-child {
+  margin-bottom: 0;
+}
+
 .card[data-is-active="true"] .cardRemoveButton {
   visibility: visible;
 }

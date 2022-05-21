@@ -1,39 +1,43 @@
 import React from 'react';
-import styles from './CardCreationForm.module.css';
+import styles from './EditorForm.module.css';
 
-interface ICardCreationFormProps {
+interface IEditorFormProps {
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: (event: React.SyntheticEvent) => void;
   onHideClick: (event: React.SyntheticEvent) => void;
+  placeholder?: string;
+  submitText?: string;
   value: string;
 }
 
-export function CardCreationForm({
+export function EditorForm({
   onChange,
   onSubmit,
   onHideClick,
+  placeholder,
+  submitText = 'Submit',
   value,
-}: ICardCreationFormProps) {
+}: IEditorFormProps) {
   return (
-    <form onSubmit={onSubmit} className={styles.cardCreationForm}>
+    <form onSubmit={onSubmit} className={styles.editorForm}>
       <textarea
         autoFocus
-        className={styles.cardCreationFormField}
+        className={styles.editorFormField}
         onChange={onChange}
         rows={3}
         value={value}
-        placeholder="Enter card name"></textarea>
-      <div className={styles.cardCreationFormButtons}>
-        <button className={styles.cardCreationFormCreateButton} type="submit" title="Add card">
-          Add card
+        placeholder={placeholder}></textarea>
+      <div className={styles.editorFormButtons}>
+        <button className={styles.editorFormCreateButton} type="submit" title={submitText}>
+          {submitText}
         </button>
         <button
-          className={styles.cardCreationFormCancelButton}
+          className={styles.editorFormCancelButton}
           type="button"
           title="Cancel"
           onClick={onHideClick}>
           <svg
-            className={styles.cardCreationFormCancelIcon}
+            className={styles.editorFormCancelIcon}
             viewBox="0 0 24 24"
             width="24"
             height="24"
