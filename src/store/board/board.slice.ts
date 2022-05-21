@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
 
 export interface ICardList {
@@ -10,6 +10,7 @@ export interface IBoardState {
   byId: {
     [key: string]: ICardList;
   };
+  editorId: string | null;
 }
 
 const initialState: IBoardState = {
@@ -27,6 +28,7 @@ const initialState: IBoardState = {
       title: 'List 3',
     },
   },
+  editorId: null,
 };
 
 export const boardSlice = createSlice({
@@ -34,11 +36,19 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {
     createCardList: (state, action) => {},
+    setEditorId: (state, action: PayloadAction<string>) => {
+      state.editorId = action.payload;
+    },
+    resetEditorId: (state) => {
+      state.editorId = null;
+    },
   },
 });
 
-export const { createCardList } = boardSlice.actions;
+export const { createCardList, setEditorId, resetEditorId } = boardSlice.actions;
 
 export const selectCardLists = (state: RootState) => Object.values(state.board.byId);
+
+export const selectIsFormShown = (state: RootState, id: string) => state.board.editorId === id;
 
 export default boardSlice.reducer;

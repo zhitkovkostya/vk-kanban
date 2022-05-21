@@ -1,42 +1,27 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { createCard } from '../../store/cards/cards.slice';
 import styles from './CardCreationForm.module.css';
 
 interface ICardCreationFormProps {
-  cardListId: string;
-  onHideFormClick: (event: React.SyntheticEvent) => void;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: (event: React.SyntheticEvent) => void;
+  onHideClick: (event: React.SyntheticEvent) => void;
+  value: string;
 }
 
-export function CardCreationForm({ cardListId, onHideFormClick }: ICardCreationFormProps) {
-  const dispatch = useDispatch();
-  const [cardTitle, setCardTitle] = React.useState<string>('');
-
-  const handleFormSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
-    dispatch(
-      createCard({
-        id: String(Date.now()),
-        parent_id: cardListId,
-        title: cardTitle,
-      })
-    );
-    setCardTitle('');
-  };
-
-  const handleFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCardTitle(event.target.value);
-  };
-
+export function CardCreationForm({
+  onChange,
+  onSubmit,
+  onHideClick,
+  value,
+}: ICardCreationFormProps) {
   return (
-    <form onSubmit={handleFormSubmit} className={styles.cardCreationForm}>
+    <form onSubmit={onSubmit} className={styles.cardCreationForm}>
       <textarea
         autoFocus
         className={styles.cardCreationFormField}
-        onChange={handleFieldChange}
+        onChange={onChange}
         rows={3}
-        value={cardTitle}
+        value={value}
         placeholder="Enter card name"></textarea>
       <div className={styles.cardCreationFormButtons}>
         <button className={styles.cardCreationFormCreateButton} type="submit" title="Add card">
@@ -46,7 +31,7 @@ export function CardCreationForm({ cardListId, onHideFormClick }: ICardCreationF
           className={styles.cardCreationFormCancelButton}
           type="button"
           title="Cancel"
-          onClick={onHideFormClick}>
+          onClick={onHideClick}>
           <svg
             className={styles.cardCreationFormCancelIcon}
             viewBox="0 0 24 24"

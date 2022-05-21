@@ -1,10 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CardCreationForm } from '../CardCreationForm/CardCreationForm';
-import { selectCardsFromList } from '../../store/cards/cards.slice';
-import styles from './CardList.module.css';
-import { RootState } from '../../store';
 import { Card } from '../Card/Card';
+import { RootState } from '../../store';
+import { createCard, selectCardsFromList } from '../../store/cards/cards.slice';
+import { resetEditorId, selectIsFormShown, setEditorId } from '../../store/board/board.slice';
+import styles from './CardList.module.css';
 
 interface ICardListProps {
   id: string;
@@ -12,15 +13,40 @@ interface ICardListProps {
 }
 
 export function CardList({ id, title }: ICardListProps) {
-  const [isFormShown, setFormShown] = React.useState(false);
+  const [formValue, setFormValue] = React.useState<string>('');
+  const dispatch = useDispatch();
+  const isFormShown = useSelector((state: RootState) => selectIsFormShown(state, id));
   const cards = useSelector((state: RootState) => selectCardsFromList(state, id)) || [];
 
   const handleShowFormClick = () => {
-    setFormShown(true);
+    dispatch(setEditorId(id));
   };
 
   const handleHideFormClick = () => {
-    setFormShown(false);
+    dispatch(resetEditorId());
+  };
+
+  const handleFormChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+
+    if (typeof value === 'undefined') {
+      return;
+    }
+
+    setFormValue(value);
+  };
+
+  const handleFormSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+
+    dispatch(
+      createCard({
+        id: String(Date.now()),
+        parent_id: id,
+        title: formValue,
+      })
+    );
+    dispatch(resetEditorId());
   };
 
   return (
@@ -32,7 +58,14 @@ export function CardList({ id, title }: ICardListProps) {
         ))}
       </main>
       <footer className={styles.cardListFooter}>
-        {isFormShown && <CardCreationForm cardListId={id} onHideFormClick={handleHideFormClick} />}
+        {isFormShown && (
+          <CardCreationForm
+            value={formValue}
+            onChange={handleFormChange}
+            onSubmit={handleFormSubmit}
+            onHideClick={handleHideFormClick}
+          />
+        )}
         {!isFormShown && (
           <button
             className={styles.cardListCreateButton}
