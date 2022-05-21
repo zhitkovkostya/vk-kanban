@@ -27,25 +27,23 @@ export function CardList({ id, title }: ICardListProps) {
   };
 
   const handleFormChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = event.target.value;
-
-    if (typeof value === 'undefined') {
-      return;
-    }
-
-    setFormValue(value);
+    setFormValue(event.target.value);
   };
 
   const handleFormSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    dispatch(
-      createCard({
-        id: String(Date.now()),
-        parent_id: id,
-        title: formValue,
-      })
-    );
+    if (formValue.length > 0) {
+      dispatch(
+        createCard({
+          id: String(Date.now()),
+          parent_id: id,
+          title: formValue,
+        })
+      );
+    }
+
+    setFormValue('');
     dispatch(resetEditorId());
   };
 
