@@ -8,3 +8,35 @@
   background-size: cover;
   padding: 16px 12px;
 }
+
+.boardShowFormButton {
+  min-width: 264px;
+  height: 40px;
+  margin: 0 4px;
+  padding: 0 16px;
+  background-color: #ffffff3d;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.boardShowFormButton:hover {
+  background-color: #ffffff52;
+}
+
+.boardShowFormButton:active {
+  background-color:#fff6;
+}
+
+.boardShowFormIcon {
+  margin-right: 4px;
+}
+
+.boardShowFormText,
+.boardShowFormIcon {
+  display: inline-block;
+  vertical-align: middle;
+}
