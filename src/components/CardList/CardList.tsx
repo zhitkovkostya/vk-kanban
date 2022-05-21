@@ -52,7 +52,9 @@ export function CardList({ id, title }: ICardListProps) {
       <header className={styles.cardListHeader}>{title}</header>
       <main className={styles.cardListBody}>
         {cards.map((card) => (
-          <Card key={card.id}>{card.title}</Card>
+          <Card id={card.id} key={card.id}>
+            {card.title}
+          </Card>
         ))}
       </main>
       <footer className={styles.cardListFooter}>

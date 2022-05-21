@@ -40,10 +40,15 @@ export const cardsSlice = createSlice({
     createCard: (state, action: PayloadAction<ICard>) => {
       state.byId[action.payload.id] = action.payload;
     },
+    removeCard: (state, action: PayloadAction<string>) => {
+      const byIdClone = { ...state.byId };
+      delete byIdClone[action.payload];
+      state.byId = byIdClone;
+    },
   },
 });
 
-export const { createCard } = cardsSlice.actions;
+export const { createCard, removeCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
 
