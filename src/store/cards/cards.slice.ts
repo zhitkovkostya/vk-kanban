@@ -17,17 +17,17 @@ const initialState: ICardsState = {
   byId: {
     card_1: {
       id: 'card_1',
-      parent_id: 'panel_1',
+      parent_id: 'list_1',
       title: 'Card 1',
     },
     card_2: {
       id: 'card_2',
-      parent_id: 'panel_1',
+      parent_id: 'list_1',
       title: 'Card 2',
     },
     card_3: {
       id: 'card_3',
-      parent_id: 'panel_2',
+      parent_id: 'list_2',
       title: 'Card 3',
     },
   },

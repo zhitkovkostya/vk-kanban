@@ -14,17 +14,17 @@ export interface IBoardState {
 
 const initialState: IBoardState = {
   byId: {
-    panel_1: {
-      id: 'panel_1',
-      title: 'Panel 1',
+    list_1: {
+      id: 'list_1',
+      title: 'List 1',
     },
-    panel_2: {
-      id: 'panel_2',
-      title: 'Panel 2',
+    list_2: {
+      id: 'list_2',
+      title: 'List 2',
     },
-    panel_3: {
-      id: 'panel_3',
-      title: 'Panel 3',
+    list_3: {
+      id: 'list_3',
+      title: 'List 3',
     },
   },
 };
