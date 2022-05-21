@@ -38,6 +38,11 @@ export const boardSlice = createSlice({
     createList: (state, action: PayloadAction<ICardList>) => {
       state.byId[action.payload.id] = action.payload;
     },
+    removeList: (state, action: PayloadAction<string>) => {
+      const byIdClone = { ...state.byId };
+      delete byIdClone[action.payload];
+      state.byId = byIdClone;
+    },
     setEditorId: (state, action: PayloadAction<string>) => {
       state.editorId = action.payload;
     },
@@ -47,7 +52,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { createList, setEditorId, resetEditorId } = boardSlice.actions;
+export const { createList, removeList, setEditorId, resetEditorId } = boardSlice.actions;
 
 export const selectCardLists = (state: RootState) => Object.values(state.board.byId);
 

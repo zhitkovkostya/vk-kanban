@@ -4,7 +4,12 @@ import { EditorForm } from '../EditorForm/EditorForm';
 import { Card } from '../Card/Card';
 import { RootState } from '../../store';
 import { createCard, selectCardsFromList } from '../../store/cards/cards.slice';
-import { resetEditorId, selectIsFormShown, setEditorId } from '../../store/board/board.slice';
+import {
+  removeList,
+  resetEditorId,
+  selectIsFormShown,
+  setEditorId,
+} from '../../store/board/board.slice';
 import styles from './CardList.module.css';
 
 interface ICardListProps {
@@ -50,9 +55,36 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
     dispatch(resetEditorId());
   };
 
+  const handleRemoveClick = () => {
+    dispatch(removeList(id));
+  };
+
   return (
     <div className={styles.cardList}>
-      {title && <header className={styles.cardListHeader}>{title}</header>}
+      {title && (
+        <header className={styles.cardListHeader}>
+          {title}
+          <button
+            className={styles.cardListRemoveButton}
+            type="button"
+            title="Delete list"
+            onClick={handleRemoveClick}>
+            <svg
+              className={styles.cardListRemoveIcon}
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              stroke="currentColor"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </header>
+      )}
       {children && <main className={styles.cardListBody}>{children}</main>}
       {cards.length > 0 && (
         <main className={styles.cardListBody}>

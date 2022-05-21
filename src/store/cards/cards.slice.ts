@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createSlice, PayloadAction, PayloadActionCreator } from '@reduxjs/toolkit';
 import { RootState } from '..';
 
 export interface ICard {
@@ -33,6 +33,8 @@ const initialState: ICardsState = {
   },
 };
 
+const removeList = createAction<string>('board/removeList');
+
 export const cardsSlice = createSlice({
   name: 'cards',
   initialState,
@@ -45,6 +47,20 @@ export const cardsSlice = createSlice({
       delete byIdClone[action.payload];
       state.byId = byIdClone;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(removeList, (state, action: PayloadAction<string>) => {
+      const cards = Object.values(state.byId);
+      const cardsFromList = cards.filter((card) => card.parent_id === action.payload);
+      const cardIdsFromList = cardsFromList.map((card) => card.id);
+      const byIdClone = { ...state.byId };
+
+      for (const cardId of cardIdsFromList) {
+        delete byIdClone[cardId];
+      }
+
+      state.byId = byIdClone;
+    });
   },
 });
 

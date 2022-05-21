@@ -12,6 +12,7 @@
 }
 
 .cardListHeader {
+  position: relative;
   padding: 8px 16px;
   font-weight: 600;
   color: #838c91;
@@ -57,6 +58,38 @@
 
 .cardListCreateButtonIcon,
 .cardListCreateButtonText {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.cardListRemoveButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px;
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  color: #5e6c84;
+  cursor: pointer;
+}
+
+.cardListRemoveButton:hover {
+  background-color: #091e4214;
+  color: #172b4d;
+}
+
+.cardListRemoveButton:active {
+  background-color: #091e4221;
+}
+
+.cardListRemoveButton {
   display: inline-block;
   vertical-align: middle;
 }
