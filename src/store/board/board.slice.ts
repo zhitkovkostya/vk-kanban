@@ -18,6 +18,14 @@ const initialState: IBoardState = {
       id: 'panel_1',
       title: 'Panel 1',
     },
+    panel_2: {
+      id: 'panel_2',
+      title: 'Panel 2',
+    },
+    panel_3: {
+      id: 'panel_3',
+      title: 'Panel 3',
+    },
   },
 };
 

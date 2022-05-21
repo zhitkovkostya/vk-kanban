@@ -25,6 +25,11 @@ const initialState: ICardsState = {
       parent_id: 'panel_1',
       title: 'Card 2',
     },
+    card_3: {
+      id: 'card_3',
+      parent_id: 'panel_2',
+      title: 'Card 3',
+    },
   },
 };
 
@@ -41,5 +46,15 @@ export const cardsSlice = createSlice({
 export const { createCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
+
+/**
+ *
+ * @param state App state
+ * @param id Parent list id
+ * @returns Card item
+ */
+export const selectCardsFromList = (state: RootState, id: string) => {
+  return selectCards(state).filter((card) => card.parent_id === id);
+};
 
 export default cardsSlice.reducer;

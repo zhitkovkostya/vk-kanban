@@ -4,10 +4,11 @@ import { createCard } from '../../store/cards/cards.slice';
 import styles from './CardCreationForm.module.css';
 
 interface ICardCreationFormProps {
+  cardListId: string;
   onHideFormClick: (event: React.SyntheticEvent) => void;
 }
 
-export function CardCreationForm({ onHideFormClick }: ICardCreationFormProps) {
+export function CardCreationForm({ cardListId, onHideFormClick }: ICardCreationFormProps) {
   const dispatch = useDispatch();
   const [cardTitle, setCardTitle] = React.useState<string>('');
 
@@ -17,7 +18,7 @@ export function CardCreationForm({ onHideFormClick }: ICardCreationFormProps) {
     dispatch(
       createCard({
         id: String(Date.now()),
-        parent_id: 'panel_1',
+        parent_id: cardListId,
         title: cardTitle,
       })
     );
