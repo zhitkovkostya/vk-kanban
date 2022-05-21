@@ -25,6 +25,7 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
   };
 
   const handleHideFormClick = () => {
+    setFormValue('');
     dispatch(resetEditorId());
   };
 
