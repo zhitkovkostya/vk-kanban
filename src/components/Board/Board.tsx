@@ -19,6 +19,7 @@ export function Board({ children }: IBoardProps) {
   };
 
   const handleFormHideClick = (event: React.SyntheticEvent) => {
+    setFormValue('');
     setFormShown(false);
   };
 
@@ -29,12 +30,14 @@ export function Board({ children }: IBoardProps) {
   const handleFormSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    dispatch(
-      createList({
-        id: String(Date.now()),
-        title: formValue,
-      })
-    );
+    if (formValue.length > 0) {
+      dispatch(
+        createList({
+          id: String(Date.now()),
+          title: formValue,
+        })
+      );
+    }
 
     setFormValue('');
     setFormShown(false);
