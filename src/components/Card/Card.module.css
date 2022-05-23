@@ -1,13 +1,17 @@
 .card {
   position: relative;
   width: 100%;
-  margin-bottom: 8px;
+  margin: 4px 0;
   padding: 6px 8px;
   border-radius: 3px;
   background-color: #fff;
   line-height: 20px;
   box-shadow: 0 1px 0 #091e4240;
   cursor: pointer;
+}
+
+.card:first-child {
+  margin-top: 0;
 }
 
 .card:last-child {
