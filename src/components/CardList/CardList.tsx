@@ -11,6 +11,7 @@ import {
   setEditorId,
 } from '../../store/board/board.slice';
 import styles from './CardList.module.css';
+import { Droppable } from 'react-beautiful-dnd';
 
 interface ICardListProps {
   id: string;
@@ -45,7 +46,7 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
       dispatch(
         createCard({
           id: String(Date.now()),
-          parent_id: id,
+          parentId: id,
           title: formValue,
         })
       );
@@ -86,15 +87,21 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
         </header>
       )}
       {children && <main className={styles.cardListBody}>{children}</main>}
-      {cards.length > 0 && (
-        <main className={styles.cardListBody}>
-          {cards.map((card) => (
-            <Card id={card.id} key={card.id}>
-              {card.title}
-            </Card>
-          ))}
-        </main>
-      )}
+      <Droppable droppableId={id}>
+        {(provided) => (
+          <main
+            className={styles.cardListBody}
+            ref={provided.innerRef}
+            {...provided.droppableProps}>
+            {cards.map((card, cardIndex) => (
+              <Card id={card.id} index={cardIndex} key={card.id}>
+                {card.title}
+              </Card>
+            ))}
+            {provided.placeholder}
+          </main>
+        )}
+      </Droppable>
 
       {!isNew && (
         <footer className={styles.cardListFooter}>
