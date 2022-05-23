@@ -1,15 +1,30 @@
-import { createAction, createSlice, PayloadAction, PayloadActionCreator } from '@reduxjs/toolkit';
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
+import { ICardList } from '../board/board.slice';
 
 export interface ICard {
   id: string;
-  parent_id: string;
   title: string;
+}
+
+export interface ICardWithParentId extends ICard {
+  parentId: string;
+}
+
+export interface ICardPosition {
+  id: string;
+  sourceIndex: number;
+  targetIndex: number;
+  sourceParentId: string;
+  targetParentId: string;
 }
 
 export interface ICardsState {
   byId: {
     [key: string]: ICard;
+  };
+  byListId: {
+    [key: string]: string[];
   };
 }
 
@@ -17,54 +32,72 @@ const initialState: ICardsState = {
   byId: {
     card_1: {
       id: 'card_1',
-      parent_id: 'list_1',
       title: 'Card 1',
     },
     card_2: {
       id: 'card_2',
-      parent_id: 'list_1',
       title: 'Card 2',
     },
     card_3: {
       id: 'card_3',
-      parent_id: 'list_2',
       title: 'Card 3',
     },
   },
+  byListId: {
+    list_1: ['card_1', 'card_2'],
+    list_2: ['card_3'],
+    list_3: [],
+  },
 };
 
+const createList = createAction<ICardList>('board/createList');
 const removeList = createAction<string>('board/removeList');
 
 export const cardsSlice = createSlice({
   name: 'cards',
   initialState,
   reducers: {
-    createCard: (state, action: PayloadAction<ICard>) => {
-      state.byId[action.payload.id] = action.payload;
+    createCard: (state, action: PayloadAction<ICardWithParentId>) => {
+      const { id, title, parentId } = action.payload;
+      state.byId[action.payload.id] = { id, title };
+      state.byListId[parentId].push(id);
     },
     removeCard: (state, action: PayloadAction<string>) => {
       const byIdClone = { ...state.byId };
       delete byIdClone[action.payload];
       state.byId = byIdClone;
     },
+    moveCard: (state, action: PayloadAction<ICardPosition>) => {
+      const {
+        id: cardId,
+        sourceIndex,
+        sourceParentId,
+        targetIndex,
+        targetParentId,
+      } = action.payload;
+
+      const sourceListClone = [...state.byListId[sourceParentId]];
+      const targetListClone =
+        sourceParentId === targetParentId ? sourceListClone : [...state.byListId[targetParentId]];
+
+      sourceListClone.splice(sourceIndex, 1);
+      targetListClone.splice(targetIndex, 0, cardId);
+
+      state.byListId[sourceParentId] = sourceListClone;
+      state.byListId[targetParentId] = targetListClone;
+    },
   },
   extraReducers: (builder) => {
+    builder.addCase(createList, (state, action: PayloadAction<ICardList>) => {
+      state.byListId[action.payload.id] = [];
+    });
     builder.addCase(removeList, (state, action: PayloadAction<string>) => {
-      const cards = Object.values(state.byId);
-      const cardsFromList = cards.filter((card) => card.parent_id === action.payload);
-      const cardIdsFromList = cardsFromList.map((card) => card.id);
-      const byIdClone = { ...state.byId };
-
-      for (const cardId of cardIdsFromList) {
-        delete byIdClone[cardId];
-      }
-
-      state.byId = byIdClone;
+      delete state.byListId[action.payload];
     });
   },
 });
 
-export const { createCard, removeCard } = cardsSlice.actions;
+export const { createCard, removeCard, moveCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
 
@@ -75,7 +108,8 @@ export const selectCards = (state: RootState) => Object.values(state.cards.byId)
  * @returns Card item
  */
 export const selectCardsFromList = (state: RootState, id: string) => {
-  return selectCards(state).filter((card) => card.parent_id === id);
+  const cardsByList = state.cards.byListId[id] || [];
+  return cardsByList.map((cardId) => state.cards.byId[cardId]);
 };
 
 export default cardsSlice.reducer;
