@@ -19,12 +19,16 @@
 }
 
 .cardListBody {
-  overflow-x: hidden;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 4px 8px;
+  margin: 0 4px;
+  padding: 4px;
+}
+
+.cardListBodyIsOver {
+  background-color: #091e420a;
+  border-radius: 3px;
 }
 
 .cardListFooter {

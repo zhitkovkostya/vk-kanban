@@ -2,7 +2,6 @@
   position: relative;
   width: 100%;
   margin: 4px 0;
-  padding: 6px 8px;
   border-radius: 3px;
   background-color: #fff;
   line-height: 20px;
@@ -18,8 +17,22 @@
   margin-bottom: 0;
 }
 
-.card[data-is-active="true"] .cardRemoveButton {
+.card:hover .cardRemoveButton {
   visibility: visible;
+}
+
+.cardIsDragging {
+  z-index: 10;
+  cursor: grabbing;
+  box-shadow: 0 12px 24px -6px #091e4240, 0 0 0 1px #091e4214;
+}
+
+.cardIsDragging .cardRemoveButton {
+  visibility: hidden;
+}
+
+.cardBody {
+  padding: 6px 8px;
 }
 
 .cardRemoveButton {

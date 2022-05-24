@@ -13,9 +13,7 @@ export interface ICardWithParentId extends ICard {
 
 export interface ICardPosition {
   id: string;
-  sourceIndex: number;
   targetIndex: number;
-  sourceParentId: string;
   targetParentId: string;
 }
 
@@ -65,17 +63,22 @@ export const cardsSlice = createSlice({
     removeCard: (state, action: PayloadAction<string>) => {
       const byIdClone = { ...state.byId };
       delete byIdClone[action.payload];
+
+      const parentId = Object.keys(state.byListId).find((listId) =>
+        state.byListId[listId].includes(action.payload)
+      );
+
       state.byId = byIdClone;
+      state.byListId[parentId!] = state.byListId[parentId!].filter(
+        (cardId) => cardId !== action.payload
+      );
     },
     moveCard: (state, action: PayloadAction<ICardPosition>) => {
-      const {
-        id: cardId,
-        sourceIndex,
-        sourceParentId,
-        targetIndex,
-        targetParentId,
-      } = action.payload;
+      const { id: cardId, targetIndex, targetParentId } = action.payload;
+      const sourceParent = Object.entries(state.byListId).find((list) => list[1].includes(cardId));
 
+      const sourceParentId = sourceParent ? sourceParent[0] : targetParentId;
+      const sourceIndex = state.byListId[sourceParentId].indexOf(cardId);
       const sourceListClone = [...state.byListId[sourceParentId]];
       const targetListClone =
         sourceParentId === targetParentId ? sourceListClone : [...state.byListId[targetParentId]];

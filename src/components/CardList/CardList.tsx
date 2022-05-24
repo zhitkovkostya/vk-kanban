@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDroppable } from '@dnd-kit/core';
 import { EditorForm } from '../EditorForm/EditorForm';
 import { Card } from '../Card/Card';
 import { RootState } from '../../store';
@@ -11,7 +12,6 @@ import {
   setEditorId,
 } from '../../store/board/board.slice';
 import styles from './CardList.module.css';
-import { Droppable } from 'react-beautiful-dnd';
 
 interface ICardListProps {
   id: string;
@@ -23,6 +23,7 @@ interface ICardListProps {
 export function CardList({ id, isNew = false, children, title }: ICardListProps) {
   const [formValue, setFormValue] = React.useState<string>('');
   const dispatch = useDispatch();
+  const { setNodeRef, isOver } = useDroppable({ id });
   const isFormShown = useSelector((state: RootState) => selectIsFormShown(state, id));
   const cards = useSelector((state: RootState) => selectCardsFromList(state, id)) || [];
 
@@ -61,7 +62,7 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
   };
 
   return (
-    <div className={styles.cardList}>
+    <div className={styles.cardList} ref={setNodeRef}>
       {title && (
         <header className={styles.cardListHeader}>
           {title}
@@ -87,22 +88,13 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
         </header>
       )}
       {children && <main className={styles.cardListBody}>{children}</main>}
-      <Droppable droppableId={id}>
-        {(provided) => (
-          <main
-            className={styles.cardListBody}
-            ref={provided.innerRef}
-            {...provided.droppableProps}>
-            {cards.map((card, cardIndex) => (
-              <Card id={card.id} index={cardIndex} key={card.id}>
-                {card.title}
-              </Card>
-            ))}
-            {provided.placeholder}
-          </main>
-        )}
-      </Droppable>
-
+      <main className={[styles.cardListBody, isOver ? styles.cardListBodyIsOver : null].join(' ')}>
+        {cards.map((card, cardIndex) => (
+          <Card id={card.id} index={cardIndex} key={card.id}>
+            {card.title}
+          </Card>
+        ))}
+      </main>
       {!isNew && (
         <footer className={styles.cardListFooter}>
           {isFormShown && (
