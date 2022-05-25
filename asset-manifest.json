@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/vk-test-task/static/css/main.2e32627d.css",
-    "main.js": "/vk-test-task/static/js/main.c46a24d8.js",
-    "static/js/787.8b1a8cc1.chunk.js": "/vk-test-task/static/js/787.8b1a8cc1.chunk.js",
-    "static/media/background.jpg": "/vk-test-task/static/media/background.78c1960b1aab4c66692c.jpg",
-    "index.html": "/vk-test-task/index.html",
-    "main.2e32627d.css.map": "/vk-test-task/static/css/main.2e32627d.css.map",
-    "main.c46a24d8.js.map": "/vk-test-task/static/js/main.c46a24d8.js.map",
-    "787.8b1a8cc1.chunk.js.map": "/vk-test-task/static/js/787.8b1a8cc1.chunk.js.map"
+    "main.css": "/vk-kanban/static/css/main.ad8697a7.css",
+    "main.js": "/vk-kanban/static/js/main.72f1beba.js",
+    "static/js/787.6e4a2423.chunk.js": "/vk-kanban/static/js/787.6e4a2423.chunk.js",
+    "static/media/background.jpg": "/vk-kanban/static/media/background.78c1960b1aab4c66692c.jpg",
+    "index.html": "/vk-kanban/index.html",
+    "main.ad8697a7.css.map": "/vk-kanban/static/css/main.ad8697a7.css.map",
+    "main.72f1beba.js.map": "/vk-kanban/static/js/main.72f1beba.js.map",
+    "787.6e4a2423.chunk.js.map": "/vk-kanban/static/js/787.6e4a2423.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2e32627d.css",
-    "static/js/main.c46a24d8.js"
+    "static/css/main.ad8697a7.css",
+    "static/js/main.72f1beba.js"
   ]
 }
