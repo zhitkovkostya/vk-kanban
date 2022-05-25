@@ -1,8 +1,8 @@
 {
-  "name": "vk-test-task",
+  "name": "vk-kanban",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://zhitkovkostya.github.io/vk-test-task",
+  "homepage": "https://zhitkovkostya.github.io/vk-kanban",
   "dependencies": {
     "@dnd-kit/core": "6.0.1",
     "@dnd-kit/sortable": "7.0.0",
