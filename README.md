@@ -2,7 +2,7 @@
 
 This project has been started as a test task for VK internship.
 
-[View demo](zhitkovkostya.github.io/vk-kanban)
+[View demo](https://zhitkovkostya.github.io/vk-kanban/)
 
 [View design](https://www.figma.com/file/5PuLgRoSkEKIegaIMfFbgm/Kanban?node-id=0%3A1)
 
