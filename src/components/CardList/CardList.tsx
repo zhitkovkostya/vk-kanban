@@ -40,9 +40,7 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
     setFormValue(event.target.value);
   };
 
-  const handleFormSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
+  const handleFormSubmit = () => {
     if (formValue.length > 0) {
       dispatch(
         createCard({
@@ -102,8 +100,8 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
               placeholder="Enter card name"
               submitText="Add card"
               value={formValue}
+              submit={handleFormSubmit}
               onChange={handleFormChange}
-              onSubmit={handleFormSubmit}
               onHideClick={handleHideFormClick}
             />
           )}

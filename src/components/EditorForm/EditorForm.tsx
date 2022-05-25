@@ -3,8 +3,8 @@ import styles from './EditorForm.module.css';
 
 interface IEditorFormProps {
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (event: React.SyntheticEvent) => void;
   onHideClick: (event: React.SyntheticEvent) => void;
+  submit: () => void;
   placeholder?: string;
   submitText?: string;
   value: string;
@@ -12,18 +12,30 @@ interface IEditorFormProps {
 
 export function EditorForm({
   onChange,
-  onSubmit,
   onHideClick,
+  submit,
   placeholder,
   submitText = 'Submit',
   value,
 }: IEditorFormProps) {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.code === 'Enter') {
+      event.preventDefault();
+      submit();
+    }
+  };
+
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    submit();
+  };
+
   return (
-    <form onSubmit={onSubmit} className={styles.editorForm}>
+    <form onSubmit={handleSubmit} className={styles.editorForm}>
       <textarea
         autoFocus
         className={styles.editorFormField}
         onChange={onChange}
+        onKeyPress={handleKeyPress}
         rows={3}
         value={value}
         placeholder={placeholder}></textarea>

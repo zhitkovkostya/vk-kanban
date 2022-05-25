@@ -62,9 +62,7 @@ export const Board = React.memo(
       setFormValue(event.target.value);
     };
 
-    const handleFormSubmit = (event: React.SyntheticEvent) => {
-      event.preventDefault();
-
+    const handleFormSubmit = () => {
       if (formValue.length > 0) {
         dispatch(
           createList({
@@ -88,8 +86,8 @@ export const Board = React.memo(
             <CardList id="new_list" isNew>
               <EditorForm
                 onChange={handleFormChange}
-                onSubmit={handleFormSubmit}
                 onHideClick={handleFormHideClick}
+                submit={handleFormSubmit}
                 placeholder="Enter list name"
                 submitText="Add list"
                 value={formValue}
