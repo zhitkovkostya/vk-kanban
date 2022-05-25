@@ -1,0 +1,70 @@
+.editorForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.editorFormField {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 20px;
+  box-shadow: 0 1px 0 #091e4240;
+  resize: none;
+}
+
+.editorFormField:focus {
+  outline: none;
+}
+
+.editorFormButtons {
+  display: flex;
+}
+
+.editorFormCreateButton {
+  margin-right: 4px;
+  padding: 6px 12px;
+  background-color: #0079bf;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  text-align: left;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.editorFormCreateButton:hover {
+  background-color: #026aa7;
+}
+
+.editorFormCreateButton:active {
+  background-color: #055a8c;
+}
+
+.editorFormCancelButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  text-align: left;
+  color: #5e6c84;
+  cursor: pointer;
+}
+
+.editorFormCancelButton:hover {
+  color: #172b4d;
+}
+
+.editorFormCancelIcon {
+  display: inline-block;
+  vertical-align: middle;
+}
