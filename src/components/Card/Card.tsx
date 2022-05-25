@@ -11,7 +11,7 @@ interface ICardProps {
   index: number;
 }
 
-export function Card({ children, id, index }: ICardProps) {
+export const Card = React.memo(function Card({ children, id, index }: ICardProps) {
   const dispatch = useDispatch();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id,
@@ -51,4 +51,4 @@ export function Card({ children, id, index }: ICardProps) {
       </button>
     </div>
   );
-}
+});
