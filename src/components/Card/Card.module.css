@@ -17,6 +17,10 @@
   margin-bottom: 0;
 }
 
+.card:hover {
+  background-color: #f4f5f7;
+}
+
 .card:hover .cardRemoveButton {
   visibility: visible;
 }
@@ -46,7 +50,7 @@
   padding: 4px;
   width: 24px;
   height: 24px;
-  background-color: transparent;
+  background-color: #f4f5f7;
   border: none;
   border-radius: 3px;
   cursor: pointer;
