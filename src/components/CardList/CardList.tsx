@@ -86,13 +86,16 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
         </header>
       )}
       {children && <main className={styles.cardListBody}>{children}</main>}
-      <main className={[styles.cardListBody, isOver ? styles.cardListBodyIsOver : null].join(' ')}>
-        {cards.map((card, cardIndex) => (
-          <Card id={card.id} index={cardIndex} key={card.id}>
-            {card.title}
-          </Card>
-        ))}
-      </main>
+      {cards.length > 0 && (
+        <main
+          className={[styles.cardListBody, isOver ? styles.cardListBodyIsOver : null].join(' ')}>
+          {cards.map((card, cardIndex) => (
+            <Card id={card.id} index={cardIndex} key={card.id}>
+              {card.title}
+            </Card>
+          ))}
+        </main>
+      )}
       {!isNew && (
         <footer className={styles.cardListFooter}>
           {isFormShown && (
