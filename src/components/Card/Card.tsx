@@ -1,22 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
 import { removeCard } from '../../store/cards/cards.slice';
 import styles from './Card.module.css';
 
 interface ICardProps {
   children?: React.ReactNode;
   id: string;
-  index: number;
+  isDraggable: boolean;
 }
 
-export const Card = React.memo(function Card({ children, id, index }: ICardProps) {
+export const Card = React.memo(function Card({ children, id, isDraggable }: ICardProps) {
   const dispatch = useDispatch();
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id,
-    data: { index },
-  });
 
   const handleRemoveClick = (event: React.SyntheticEvent) => {
     event.stopPropagation();
@@ -26,14 +20,8 @@ export const Card = React.memo(function Card({ children, id, index }: ICardProps
   };
 
   return (
-    <div
-      className={[styles.card, isDragging ? styles.cardIsDragging : null].join(' ')}
-      style={{
-        transform: isDragging ? `${CSS.Translate.toString(transform)} rotate(4deg)` : 'none',
-      }}>
-      <div className={styles.cardBody} ref={setNodeRef} {...attributes} {...listeners}>
-        {children}
-      </div>
+    <div className={[styles.card, isDraggable ? styles.cardIsDragging : null].join(' ')}>
+      <div className={styles.cardBody}>{children}</div>
       <button className={styles.cardRemoveButton} onClick={handleRemoveClick} title="Delete card">
         <svg
           className={styles.cardRemoveIcon}

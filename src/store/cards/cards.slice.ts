@@ -14,7 +14,6 @@ export interface ICardWithParentId extends ICard {
 export interface ICardPosition {
   id: string;
   targetIndex: number;
-  targetParentId: string;
 }
 
 export interface ICardsState {
@@ -74,20 +73,21 @@ export const cardsSlice = createSlice({
       );
     },
     moveCard: (state, action: PayloadAction<ICardPosition>) => {
-      const { id: cardId, targetIndex, targetParentId } = action.payload;
+      const { id: cardId, targetIndex } = action.payload;
       const sourceParent = Object.entries(state.byListId).find((list) => list[1].includes(cardId));
+      const targetParent = sourceParent;
 
-      const sourceParentId = sourceParent ? sourceParent[0] : targetParentId;
+      if (sourceParent === undefined || targetParent === undefined) {
+        return;
+      }
+
+      const sourceParentId = sourceParent[0];
+      const targetParentId = targetParent[0];
+
       const sourceIndex = state.byListId[sourceParentId].indexOf(cardId);
-      const sourceListClone = [...state.byListId[sourceParentId]];
-      const targetListClone =
-        sourceParentId === targetParentId ? sourceListClone : [...state.byListId[targetParentId]];
 
-      sourceListClone.splice(sourceIndex, 1);
-      targetListClone.splice(targetIndex, 0, cardId);
-
-      state.byListId[sourceParentId] = sourceListClone;
-      state.byListId[targetParentId] = targetListClone;
+      state.byListId[sourceParentId].splice(sourceIndex, 1);
+      state.byListId[targetParentId].splice(targetIndex, 0, cardId);
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +103,7 @@ export const cardsSlice = createSlice({
 export const { createCard, removeCard, moveCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
+export const selectCardsByListId = (state: RootState) => state.cards.byListId;
 
 /**
  *

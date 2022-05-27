@@ -1,20 +1,20 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   DndContext,
   DragEndEvent,
-  KeyboardSensor,
+  MeasuringStrategy,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { moveCard } from '../../store/cards/cards.slice';
+import { moveCard, selectCardsByListId } from '../../store/cards/cards.slice';
 import { createList, ICardList } from '../../store/board/board.slice';
 import { EditorForm } from '../EditorForm/EditorForm';
 import { CardList } from '../CardList/CardList';
 import styles from './Board.module.css';
+import { SortableColumn } from '../../containers/SortableColumn/SortableColumn';
 
 interface IBoardProps {
   cardLists: ICardList[];
@@ -24,27 +24,21 @@ export const Board = React.memo(
   function Board({ cardLists }: IBoardProps) {
     const [isFormShown, setFormShown] = React.useState(false);
     const [formValue, setFormValue] = React.useState<string>('');
+    const cardsByListId = useSelector(selectCardsByListId) || [];
     const dispatch = useDispatch();
-    const sensors = useSensors(
-      useSensor(MouseSensor),
-      useSensor(TouchSensor),
-      useSensor(KeyboardSensor, {
-        coordinateGetter: sortableKeyboardCoordinates,
-      })
-    );
+    const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
     function handleDragEnd({ active, over }: DragEndEvent) {
       if (over === null) {
         return;
       }
       const id = String(active.id);
-      const targetParentId = String(over.id);
+      const targetIndex = over.data.current ? over.data.current.index : 0;
 
       dispatch(
         moveCard({
           id,
-          targetIndex: 0,
-          targetParentId,
+          targetIndex,
         })
       );
     }
@@ -77,10 +71,19 @@ export const Board = React.memo(
     };
 
     return (
-      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+      <DndContext
+        onDragEnd={handleDragEnd}
+        sensors={sensors}
+        measuring={{
+          droppable: {
+            strategy: MeasuringStrategy.Always,
+          },
+        }}>
         <div className={styles.board}>
           {cardLists.map((cardList) => (
-            <CardList key={cardList.id} id={cardList.id} title={cardList.title} />
+            <SortableColumn id={cardList.id} items={cardsByListId[cardList.id]} key={cardList.id}>
+              <CardList id={cardList.id} title={cardList.title} />
+            </SortableColumn>
           ))}
           {isFormShown && (
             <CardList id="new_list" isNew>
