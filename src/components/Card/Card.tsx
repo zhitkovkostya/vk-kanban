@@ -1,3 +1,4 @@
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { removeCard } from '../../store/cards/cards.slice';
@@ -7,9 +8,15 @@ interface ICardProps {
   children?: React.ReactNode;
   id: string;
   isDraggable: boolean;
+  dragHandleListeners?: SyntheticListenerMap;
 }
 
-export const Card = React.memo(function Card({ children, id, isDraggable }: ICardProps) {
+export const Card = React.memo(function Card({
+  children,
+  id,
+  isDraggable,
+  dragHandleListeners,
+}: ICardProps) {
   const dispatch = useDispatch();
 
   const handleRemoveClick = (event: React.SyntheticEvent) => {
@@ -21,7 +28,9 @@ export const Card = React.memo(function Card({ children, id, isDraggable }: ICar
 
   return (
     <div className={[styles.card, isDraggable ? styles.cardIsDragging : null].join(' ')}>
-      <div className={styles.cardBody}>{children}</div>
+      <div className={styles.cardBody} {...dragHandleListeners}>
+        {children}
+      </div>
       <button className={styles.cardRemoveButton} onClick={handleRemoveClick} title="Delete card">
         <svg
           className={styles.cardRemoveIcon}

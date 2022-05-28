@@ -117,8 +117,8 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
                 key={card.id}
                 id={card.id}
                 index={cardIndex}
-                renderCard={(isDraggable) => (
-                  <Card id={card.id} isDraggable={isDraggable}>
+                renderCard={(isDraggable, listeners) => (
+                  <Card id={card.id} isDraggable={isDraggable} dragHandleListeners={listeners}>
                     {card.title}
                   </Card>
                 )}

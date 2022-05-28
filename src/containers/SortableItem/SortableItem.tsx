@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 export interface ISortableItemProps {
-  renderCard: (isDragging: boolean) => React.ReactNode;
+  renderCard: (isDragging: boolean, listeners?: SyntheticListenerMap) => React.ReactNode;
   id: string;
   index: number;
 }
@@ -23,8 +24,8 @@ export function SortableItem({ renderCard, id, index }: ISortableItemProps) {
   };
 
   return (
-    <div ref={setNodeRef} style={styles} {...attributes} {...listeners}>
-      {renderCard(isDragging)}
+    <div ref={setNodeRef} style={styles} {...attributes}>
+      {renderCard(isDragging, listeners)}
     </div>
   );
 }
