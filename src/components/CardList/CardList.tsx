@@ -11,7 +11,6 @@ import {
   setEditorId,
 } from '../../store/board/board.slice';
 import styles from './CardList.module.css';
-import { SortableContext } from '@dnd-kit/sortable';
 import { SortableItem } from '../../containers/SortableItem/SortableItem';
 
 interface ICardListProps {
@@ -101,47 +100,45 @@ export function CardList({ id, isNew = false, children, title }: ICardListProps)
   );
 
   return (
-    <SortableContext items={cards.map((card) => card.id)}>
-      <div className={styles.cardList}>
-        {title && (
-          <header className={styles.cardListHeader}>
-            {title}
-            {renderRemoveButton()}
-          </header>
-        )}
-        {children && <main className={styles.cardListBody}>{children}</main>}
-        {cards.length > 0 && (
-          <main className={styles.cardListBody}>
-            {cards.map((card, cardIndex) => (
-              <SortableItem
-                key={card.id}
-                id={card.id}
-                index={cardIndex}
-                renderCard={(isDraggable, listeners) => (
-                  <Card id={card.id} isDraggable={isDraggable} dragHandleListeners={listeners}>
-                    {card.title}
-                  </Card>
-                )}
-              />
-            ))}
-          </main>
-        )}
-        {!isNew && (
-          <footer className={styles.cardListFooter}>
-            {isFormShown && (
-              <EditorForm
-                placeholder="Enter card name"
-                submitText="Add card"
-                value={formValue}
-                submit={handleFormSubmit}
-                onChange={handleFormChange}
-                onHideClick={handleHideFormClick}
-              />
-            )}
-            {!isFormShown && renderFormShowButton()}
-          </footer>
-        )}
-      </div>
-    </SortableContext>
+    <div className={styles.cardList}>
+      {title && (
+        <header className={styles.cardListHeader}>
+          {title}
+          {renderRemoveButton()}
+        </header>
+      )}
+      {children && <main className={styles.cardListBody}>{children}</main>}
+      {cards.length > 0 && (
+        <main className={styles.cardListBody}>
+          {cards.map((card, cardIndex) => (
+            <SortableItem
+              key={card.id}
+              id={card.id}
+              index={cardIndex}
+              renderCard={(isDraggable, listeners) => (
+                <Card id={card.id} isDraggable={isDraggable} dragHandleListeners={listeners}>
+                  {card.title}
+                </Card>
+              )}
+            />
+          ))}
+        </main>
+      )}
+      {!isNew && (
+        <footer className={styles.cardListFooter}>
+          {isFormShown && (
+            <EditorForm
+              placeholder="Enter card name"
+              submitText="Add card"
+              value={formValue}
+              submit={handleFormSubmit}
+              onChange={handleFormChange}
+              onHideClick={handleHideFormClick}
+            />
+          )}
+          {!isFormShown && renderFormShowButton()}
+        </footer>
+      )}
+    </div>
   );
 }
