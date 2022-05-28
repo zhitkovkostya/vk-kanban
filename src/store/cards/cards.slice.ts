@@ -1,4 +1,5 @@
 import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { arrayMove } from '@dnd-kit/sortable';
 import { RootState } from '..';
 import { ICardList } from '../board/board.slice';
 
@@ -13,8 +14,10 @@ export interface ICardWithParentId extends ICard {
 
 export interface ICardPosition {
   id: string;
+  sourceListId: string;
+  targetListId: string;
+  sourceIndex: number;
   targetIndex: number;
-  targetParentId: string;
 }
 
 export interface ICardsState {
@@ -74,20 +77,18 @@ export const cardsSlice = createSlice({
       );
     },
     moveCard: (state, action: PayloadAction<ICardPosition>) => {
-      const { id: cardId, targetIndex, targetParentId } = action.payload;
-      const sourceParent = Object.entries(state.byListId).find((list) => list[1].includes(cardId));
+      const { id: cardId, sourceListId, targetListId, sourceIndex, targetIndex } = action.payload;
 
-      const sourceParentId = sourceParent ? sourceParent[0] : targetParentId;
-      const sourceIndex = state.byListId[sourceParentId].indexOf(cardId);
-      const sourceListClone = [...state.byListId[sourceParentId]];
-      const targetListClone =
-        sourceParentId === targetParentId ? sourceListClone : [...state.byListId[targetParentId]];
-
-      sourceListClone.splice(sourceIndex, 1);
-      targetListClone.splice(targetIndex, 0, cardId);
-
-      state.byListId[sourceParentId] = sourceListClone;
-      state.byListId[targetParentId] = targetListClone;
+      if (sourceListId === targetListId) {
+        state.byListId[sourceListId] = arrayMove(
+          state.byListId[sourceListId],
+          sourceIndex,
+          targetIndex
+        );
+      } else {
+        state.byListId[sourceListId].splice(sourceIndex, 1);
+        state.byListId[targetListId].splice(targetIndex, 0, cardId);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +104,8 @@ export const cardsSlice = createSlice({
 export const { createCard, removeCard, moveCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
+export const selectCardsById = (state: RootState) => state.cards.byId;
+export const selectCardsByListId = (state: RootState) => state.cards.byListId;
 
 /**
  *
