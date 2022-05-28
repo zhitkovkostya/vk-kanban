@@ -14,6 +14,7 @@ export function SortableItem({ renderCard, id, index }: ISortableItemProps) {
     id,
     data: {
       index,
+      type: 'item',
     },
   });
 

@@ -3,18 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   DndContext,
   DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   MeasuringStrategy,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { moveCard, selectCardsByListId } from '../../store/cards/cards.slice';
+import { moveCard, selectCardsById, selectCardsByListId } from '../../store/cards/cards.slice';
 import { createList, ICardList } from '../../store/board/board.slice';
 import { EditorForm } from '../EditorForm/EditorForm';
 import { CardList } from '../CardList/CardList';
 import styles from './Board.module.css';
 import { SortableColumn } from '../../containers/SortableColumn/SortableColumn';
+import { Card } from '../Card/Card';
 
 interface IBoardProps {
   cardLists: ICardList[];
@@ -23,31 +26,54 @@ interface IBoardProps {
 export const Board = React.memo(
   function Board({ cardLists }: IBoardProps) {
     const [isFormShown, setFormShown] = React.useState(false);
+    const [activeDraggableId, setActiveDraggableId] = React.useState<string | null>(null);
     const [formValue, setFormValue] = React.useState<string>('');
-    const cardsByListId = useSelector(selectCardsByListId) || [];
+    const cardsByListId = useSelector(selectCardsByListId);
+    const cardsById = useSelector(selectCardsById);
     const dispatch = useDispatch();
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-    function handleDragEnd({ active, over }: DragEndEvent) {
-      if (over === null) {
+    const handleDragStart = ({ active }: DragStartEvent) => {
+      setActiveDraggableId(String(active.id));
+    };
+
+    const handleDragEnd = ({ active, over }: DragEndEvent) => {
+      const activeType = active.data.current?.type;
+
+      if (over === null || active.id === over.id) {
         return;
       }
-      const id = String(active.id);
-      const targetIndex = over.data.current ? over.data.current.index : 0;
 
-      dispatch(
-        moveCard({
-          id,
-          targetIndex,
-        })
-      );
-    }
+      const activeId = String(active.id);
+      const overId = String(over.id);
 
-    const handleShowFormClick = (event: React.SyntheticEvent) => {
+      if (activeType === 'item') {
+        const { containerId: activeContainerId } = active.data.current?.sortable;
+        const overContainerId =
+          over.data.current?.type === 'column' ? over.id : over.data.current?.sortable.containerId;
+        const oldIndex = cardsByListId[activeContainerId].indexOf(activeId);
+        const newIndex =
+          over.data.current?.type === 'column' ? 0 : cardsByListId[overContainerId].indexOf(overId);
+
+        dispatch(
+          moveCard({
+            id: activeId,
+            sourceListId: activeContainerId,
+            targetListId: overContainerId,
+            sourceIndex: oldIndex,
+            targetIndex: newIndex,
+          })
+        );
+      }
+
+      setActiveDraggableId(null);
+    };
+
+    const handleShowFormClick = () => {
       setFormShown(true);
     };
 
-    const handleFormHideClick = (event: React.SyntheticEvent) => {
+    const handleFormHideClick = () => {
       setFormValue('');
       setFormShown(false);
     };
@@ -72,6 +98,7 @@ export const Board = React.memo(
 
     return (
       <DndContext
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         sensors={sensors}
         measuring={{
@@ -117,6 +144,13 @@ export const Board = React.memo(
             <span className={styles.boardShowFormText}>Add list</span>
           </button>
         </div>
+        <DragOverlay>
+          {activeDraggableId ? (
+            <Card id={activeDraggableId} isDraggable>
+              {cardsById[activeDraggableId].title}
+            </Card>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     );
   },

@@ -1,4 +1,5 @@
 import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { arrayMove } from '@dnd-kit/sortable';
 import { RootState } from '..';
 import { ICardList } from '../board/board.slice';
 
@@ -13,6 +14,9 @@ export interface ICardWithParentId extends ICard {
 
 export interface ICardPosition {
   id: string;
+  sourceListId: string;
+  targetListId: string;
+  sourceIndex: number;
   targetIndex: number;
 }
 
@@ -73,21 +77,18 @@ export const cardsSlice = createSlice({
       );
     },
     moveCard: (state, action: PayloadAction<ICardPosition>) => {
-      const { id: cardId, targetIndex } = action.payload;
-      const sourceParent = Object.entries(state.byListId).find((list) => list[1].includes(cardId));
-      const targetParent = sourceParent;
+      const { id: cardId, sourceListId, targetListId, sourceIndex, targetIndex } = action.payload;
 
-      if (sourceParent === undefined || targetParent === undefined) {
-        return;
+      if (sourceListId === targetListId) {
+        state.byListId[sourceListId] = arrayMove(
+          state.byListId[sourceListId],
+          sourceIndex,
+          targetIndex
+        );
+      } else {
+        state.byListId[sourceListId].splice(sourceIndex, 1);
+        state.byListId[targetListId].splice(targetIndex, 0, cardId);
       }
-
-      const sourceParentId = sourceParent[0];
-      const targetParentId = targetParent[0];
-
-      const sourceIndex = state.byListId[sourceParentId].indexOf(cardId);
-
-      state.byListId[sourceParentId].splice(sourceIndex, 1);
-      state.byListId[targetParentId].splice(targetIndex, 0, cardId);
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +104,7 @@ export const cardsSlice = createSlice({
 export const { createCard, removeCard, moveCard } = cardsSlice.actions;
 
 export const selectCards = (state: RootState) => Object.values(state.cards.byId);
+export const selectCardsById = (state: RootState) => state.cards.byId;
 export const selectCardsByListId = (state: RootState) => state.cards.byListId;
 
 /**

@@ -1,5 +1,6 @@
 import React from 'react';
 import { SortableContext } from '@dnd-kit/sortable';
+import { useDroppable } from '@dnd-kit/core';
 
 export interface ISortableColumn {
   children?: React.ReactNode;
@@ -8,9 +9,15 @@ export interface ISortableColumn {
 }
 
 export function SortableColumn({ children, id, items }: ISortableColumn) {
+  const { setNodeRef } = useDroppable({
+    id: id,
+    data: { type: 'column' },
+  });
   return (
-    <SortableContext id={id} items={items}>
-      {children}
-    </SortableContext>
+    <div ref={setNodeRef}>
+      <SortableContext id={id} items={items}>
+        {children}
+      </SortableContext>
+    </div>
   );
 }

@@ -7,14 +7,16 @@ import styles from './Card.module.css';
 interface ICardProps {
   children?: React.ReactNode;
   id: string;
-  isDraggable: boolean;
+  isDraggable?: boolean;
+  isPlaceholder?: boolean;
   dragHandleListeners?: SyntheticListenerMap;
 }
 
 export const Card = React.memo(function Card({
   children,
   id,
-  isDraggable,
+  isDraggable = false,
+  isPlaceholder = false,
   dragHandleListeners,
 }: ICardProps) {
   const dispatch = useDispatch();
@@ -27,7 +29,12 @@ export const Card = React.memo(function Card({
   };
 
   return (
-    <div className={[styles.card, isDraggable ? styles.cardIsDragging : null].join(' ')}>
+    <div
+      className={[
+        styles.card,
+        isDraggable ? styles.cardIsDragging : null,
+        isPlaceholder ? styles.cardIsPlaceholder : null,
+      ].join(' ')}>
       <div className={styles.cardBody} {...dragHandleListeners}>
         {children}
       </div>

@@ -23,8 +23,11 @@
   transform: rotate(4deg);
 }
 
-.cardIsDragging .cardRemoveButton {
-  visibility: hidden;
+.cardIsPlaceholder {
+  background-color: #091e420a;
+  font-size: 0;
+  height: 32px;
+  box-shadow: none;
 }
 
 .cardBody {
