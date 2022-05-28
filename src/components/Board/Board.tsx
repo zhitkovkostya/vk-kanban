@@ -31,7 +31,14 @@ export const Board = React.memo(
     const cardsByListId = useSelector(selectCardsByListId);
     const cardsById = useSelector(selectCardsById);
     const dispatch = useDispatch();
-    const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+    const touchSensor = useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    });
+    const mouseSensor = useSensor(MouseSensor);
+    const sensors = useSensors(mouseSensor, touchSensor);
 
     const handleDragStart = ({ active }: DragStartEvent) => {
       setActiveDraggableId(String(active.id));
@@ -145,7 +152,7 @@ export const Board = React.memo(
           </button>
         </div>
         <DragOverlay>
-          {activeDraggableId ? (
+          {activeDraggableId && cardsById[activeDraggableId] ? (
             <Card id={activeDraggableId} isDraggable>
               {cardsById[activeDraggableId].title}
             </Card>
