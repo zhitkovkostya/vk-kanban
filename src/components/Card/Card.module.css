@@ -30,6 +30,10 @@
   box-shadow: none;
 }
 
+.cardIsPlaceholder .cardRemoveButton {
+  visibility: hidden;
+}
+
 .cardBody {
   padding: 6px 8px;
 }
