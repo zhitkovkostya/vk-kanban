@@ -9,14 +9,6 @@
   cursor: pointer;
 }
 
-.card:first-child {
-  margin-top: 0;
-}
-
-.card:last-child {
-  margin-bottom: 0;
-}
-
 .card:hover {
   background-color: #f4f5f7;
 }
@@ -26,13 +18,16 @@
 }
 
 .cardIsDragging {
-  z-index: 10;
   cursor: grabbing;
   box-shadow: 0 12px 24px -6px #091e4240, 0 0 0 1px #091e4214;
+  transform: rotate(4deg);
 }
 
-.cardIsDragging .cardRemoveButton {
-  visibility: hidden;
+.cardIsPlaceholder {
+  background-color: #091e420a;
+  font-size: 0;
+  height: 32px;
+  box-shadow: none;
 }
 
 .cardBody {

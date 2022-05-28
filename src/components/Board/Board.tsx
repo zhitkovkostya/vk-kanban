@@ -1,20 +1,23 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   DndContext,
   DragEndEvent,
-  KeyboardSensor,
+  DragOverlay,
+  DragStartEvent,
+  MeasuringStrategy,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { moveCard } from '../../store/cards/cards.slice';
+import { moveCard, selectCardsById, selectCardsByListId } from '../../store/cards/cards.slice';
 import { createList, ICardList } from '../../store/board/board.slice';
 import { EditorForm } from '../EditorForm/EditorForm';
 import { CardList } from '../CardList/CardList';
 import styles from './Board.module.css';
+import { SortableColumn } from '../../containers/SortableColumn/SortableColumn';
+import { Card } from '../Card/Card';
 
 interface IBoardProps {
   cardLists: ICardList[];
@@ -23,37 +26,54 @@ interface IBoardProps {
 export const Board = React.memo(
   function Board({ cardLists }: IBoardProps) {
     const [isFormShown, setFormShown] = React.useState(false);
+    const [activeDraggableId, setActiveDraggableId] = React.useState<string | null>(null);
     const [formValue, setFormValue] = React.useState<string>('');
+    const cardsByListId = useSelector(selectCardsByListId);
+    const cardsById = useSelector(selectCardsById);
     const dispatch = useDispatch();
-    const sensors = useSensors(
-      useSensor(MouseSensor),
-      useSensor(TouchSensor),
-      useSensor(KeyboardSensor, {
-        coordinateGetter: sortableKeyboardCoordinates,
-      })
-    );
+    const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-    function handleDragEnd({ active, over }: DragEndEvent) {
-      if (over === null) {
+    const handleDragStart = ({ active }: DragStartEvent) => {
+      setActiveDraggableId(String(active.id));
+    };
+
+    const handleDragEnd = ({ active, over }: DragEndEvent) => {
+      const activeType = active.data.current?.type;
+
+      if (over === null || active.id === over.id) {
         return;
       }
-      const id = String(active.id);
-      const targetParentId = String(over.id);
 
-      dispatch(
-        moveCard({
-          id,
-          targetIndex: 0,
-          targetParentId,
-        })
-      );
-    }
+      const activeId = String(active.id);
+      const overId = String(over.id);
 
-    const handleShowFormClick = (event: React.SyntheticEvent) => {
+      if (activeType === 'item') {
+        const { containerId: activeContainerId } = active.data.current?.sortable;
+        const overContainerId =
+          over.data.current?.type === 'column' ? over.id : over.data.current?.sortable.containerId;
+        const oldIndex = cardsByListId[activeContainerId].indexOf(activeId);
+        const newIndex =
+          over.data.current?.type === 'column' ? 0 : cardsByListId[overContainerId].indexOf(overId);
+
+        dispatch(
+          moveCard({
+            id: activeId,
+            sourceListId: activeContainerId,
+            targetListId: overContainerId,
+            sourceIndex: oldIndex,
+            targetIndex: newIndex,
+          })
+        );
+      }
+
+      setActiveDraggableId(null);
+    };
+
+    const handleShowFormClick = () => {
       setFormShown(true);
     };
 
-    const handleFormHideClick = (event: React.SyntheticEvent) => {
+    const handleFormHideClick = () => {
       setFormValue('');
       setFormShown(false);
     };
@@ -77,10 +97,20 @@ export const Board = React.memo(
     };
 
     return (
-      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+      <DndContext
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        sensors={sensors}
+        measuring={{
+          droppable: {
+            strategy: MeasuringStrategy.Always,
+          },
+        }}>
         <div className={styles.board}>
           {cardLists.map((cardList) => (
-            <CardList key={cardList.id} id={cardList.id} title={cardList.title} />
+            <SortableColumn id={cardList.id} items={cardsByListId[cardList.id]} key={cardList.id}>
+              <CardList id={cardList.id} title={cardList.title} />
+            </SortableColumn>
           ))}
           {isFormShown && (
             <CardList id="new_list" isNew>
@@ -114,6 +144,13 @@ export const Board = React.memo(
             <span className={styles.boardShowFormText}>Add list</span>
           </button>
         </div>
+        <DragOverlay>
+          {activeDraggableId ? (
+            <Card id={activeDraggableId} isDraggable>
+              {cardsById[activeDraggableId].title}
+            </Card>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     );
   },
