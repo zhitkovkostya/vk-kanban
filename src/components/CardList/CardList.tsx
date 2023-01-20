@@ -21,7 +21,7 @@ interface ICardListProps {
 }
 
 export function CardList({ id, isNew = false, children, title }: ICardListProps) {
-  const [formValue, setFormValue] = React.useState<string>('');
+  const [formValue, setFormValue] = React.useState('');
   const dispatch = useDispatch();
   const isFormShown = useSelector((state: RootState) => selectIsFormShown(state, id));
   const cards = useSelector((state: RootState) => selectCardsFromList(state, id)) || [];
